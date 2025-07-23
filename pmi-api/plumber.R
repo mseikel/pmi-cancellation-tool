@@ -194,13 +194,13 @@ estimate_pmi_cancellation_months <- function(
   }
 
   numeric_score <- map_score_tier_to_numeric(credit_score_tier)
+  oltv_orig <- original_mortgage / purchase_price * 100
+  fixed_prem_rate <- lookup_mi_premium(oltv_orig, numeric_score)
   total_mi_paid <- 0
 
   for (i in (months_elapsed + 1):month_78) {
     balance <- schedule[i + 1]
-    oltv <- balance / purchase_price * 100
-    prem_rate <- lookup_mi_premium(oltv, numeric_score)
-    total_mi_paid <- total_mi_paid + balance * prem_rate
+    total_mi_paid <- total_mi_paid + balance * fixed_prem_rate
   }
 
   return(list(

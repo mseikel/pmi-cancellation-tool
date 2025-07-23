@@ -145,11 +145,11 @@ if (step === "done") {
             The typical house purchased in <strong>{resultData.cbsa_used?.[0] || resultData.state_used?.[0]} </strong>
             {resultData.appreciation_percent >= 0 ? (
               <>
-              <strong>increased</strong> in value by{" "}
+              <strong>rose</strong> in value by{" "}
               </> 
               ) : (
               <>
-              <strong>decreased</strong> in value by{" "}
+              <strong>fell</strong> in value by{" "}
               </>
             )}              
             <strong>{resultData.appreciation_percent?.toLocaleString()}%</strong> between <strong>{monthName(answers.purchaseMonth)} {answers.purchaseYear} </strong> 
@@ -219,14 +219,14 @@ if (step === "done") {
 
 if (step === "exit_non_conventional") {
   return (
-    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-4xl mx-auto space-y-6">
-      <h2 className="font-heading text-2xl md:text-5xl tracking-wider uppercase">
-        This tool only applies to <br />
-        <strong>30-year conventional</strong> loans.
+    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-xl mx-auto space-y-6">
+      <h2 className="text-4xl font-semibold">
+        This tool only applies <br />
+        to <strong>30-year conventional</strong> mortgages.
       </h2>
-      <h2 className="text-xl leading-relaxed pt-10">
-        But you can still take action — explore our policy resources
-        <br /> or templates for contacting your servicer.
+      <h2 className="text-xl leading-relaxed pt-4">
+        But you can still take action by exploring our resources
+        and templates for contacting servicers.
       </h2>
       <div className="flex flex-col md:flex-row gap-4 w-full justify-center">
         <Link
@@ -287,7 +287,7 @@ const renderStep = () => {
 
         <p className="text-2xl md:text-2xl leading-relaxed mt-12 mb-6 max-w-5xl">
           Answer a few quick questions to find out
-          if you're one of over <strong>2 million</strong> homeowners likely eligible to save an average of <strong>$1,200</strong>.
+          if you're one of over <strong>2 million</strong> homeowners likely eligible to save an average of <strong>$1,200</strong> or more.
         </p>
 
       <div className="flex justify-center gap-4 flex-wrap">
@@ -345,7 +345,7 @@ switch (step) {
         }
         options={[
           { label: "Yes", value: true, next: "step2_purchase" },
-          { label: "No", value: false },
+          { label: "No", value: false, next: "exit_non_conventional" },
         ]}
         onAnswer={(val, next) => handleAnswer("conventional", val, next)}
       />
