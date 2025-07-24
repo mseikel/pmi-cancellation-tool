@@ -98,7 +98,7 @@ useEffect(() => {
           ? parseFloat(answers.interestRate)
           : undefined,
       credit_score: answers.creditScore || "Great (720 - 759)",
-      currently_delinquent: answers.delinquent ?? false,
+      currently_delinquent: answers.currentlyDelinquent ?? false,
       late_30_in_12mo: answers.late30 ?? false,
       late_60_in_24mo: answers.late60 ?? false,
       equity_boost: typeof answers.equityBoost === "boolean" ? answers.equityBoost : false,
@@ -141,6 +141,9 @@ if (step === "done") {
 
       {resultData && (
         <div className="bg-white text-left p-4 mt-4 rounded-xl border space-y-3">
+          <p>
+            {resultData.eligibility_message}
+          </p>
           <p>
             The typical house purchased in <strong>{resultData.cbsa_used?.[0] || resultData.state_used?.[0]} </strong>
             {resultData.appreciation_percent >= 0 ? (
@@ -219,15 +222,15 @@ if (step === "done") {
 
 if (step === "exit_non_conventional") {
   return (
-    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-xl mx-auto space-y-6">
-      <h2 className="text-4xl font-semibold">
-        This tool only applies <br />
+    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-3xl mx-auto space-y-6">
+      <h1 className="font-heading text-3xl md:text-5xl tracking-wider uppercase">
+        This tool only applies
         to <strong>30-year conventional</strong> mortgages.
-      </h2>
-      <h2 className="text-xl leading-relaxed pt-4">
+      </h1>
+      <p className="text-xl md:text-3xl leading-relaxed mt-12 mb-6 max-w-5xl">
         But you can still take action by exploring our resources
         and templates for contacting servicers.
-      </h2>
+      </p>
       <div className="flex flex-col md:flex-row gap-4 w-full justify-center">
         <Link
           to="/learn"
@@ -249,15 +252,15 @@ if (step === "exit_non_conventional") {
 
 if (step === "exit_high_downpayment") {
   return (
-    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-4xl mx-auto space-y-6">
-      <h2 className="font-heading text-2xl md:text-5xl tracking-wider uppercase">
+    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-3xl mx-auto space-y-6">
+      <h1 className="font-heading text-3xl md:text-5xl tracking-wider uppercase">
         PMI is <strong>not</strong> required with <br />
         <strong>20% or more</strong> down.
-      </h2>
-      <h2 className="text-xl leading-relaxed pt-10">
-          But you can still take action — explore our policy resources
-        <br /> or templates for contacting your servicer.
-      </h2>
+      </h1>
+      <p className="text-xl md:text-3xl leading-relaxed mt-12 mb-6 max-w-5xl">
+        But you can still take action by exploring our resources
+        and templates for contacting servicers.
+      </p>
       <div className="flex flex-col md:flex-row gap-4 w-full justify-center">
         <Link
           to="/learn"
@@ -285,23 +288,23 @@ const renderStep = () => {
           Are you paying <br /> <span className="font-bold">unnecessary</span> PMI?
         </h1>
 
-        <p className="text-2xl md:text-2xl leading-relaxed mt-12 mb-6 max-w-5xl">
+        <p className="text-xl md:text-3xl leading-relaxed mt-12 mb-6 max-w-5xl">
           Answer a few quick questions to find out
-          if you're one of over <strong>2 million</strong> homeowners likely eligible to save an average of <strong>$1,200</strong> or more.
+          if you're one of over <strong>2 million</strong> homeowners likely eligible to save an average of <strong>$1,200</strong> each year.
         </p>
 
-      <div className="flex justify-center gap-4 flex-wrap">
+      <div className="flex flex-col md:flex-row justify-center gap-4 w-full max-w-xl mx-auto">
         <a
           href="/learn"
-          className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold"
+          className="w-full md:w-auto text-center bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold"
         >
           WHAT IS PMI?
         </a>
         <button
-          onClick={() => setStep("step1_conventional")}
-          className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold"
+        onClick={() => setStep("step1_conventional")}
+        className="w-full md:w-auto text-center bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold"
         >
-          START SURVEY
+        START SURVEY
         </button>
       </div>
     </div>
@@ -427,10 +430,15 @@ switch (step) {
     return (
       <DelinquencyQuestion
         onSubmit={({ currentlyDelinquent, late30, late60 }) => {
-          handleAnswer("currentlyDelinquent", currentlyDelinquent);
-          handleAnswer("late30", late30);
-          handleAnswer("late60", late60);
-          setStep("step8_equity_boost");
+          handleAnswer(
+            {
+              currentlyDelinquent,
+              late30,
+              late60,
+            },
+            undefined,
+            "step8_equity_boost"
+          );      
         }}
       />
     );
@@ -625,12 +633,12 @@ function DateQuestion({
       </h2>
 
       {/* Month and year input row */}
-      <div className="flex flex-col md:flex-row gap-4 justify-center max-w-xl mx-auto">
+      <div className="flex flex-col md:flex-row gap-4 justify-center max-w-md mx-auto w-full">
         {/* Month dropdown */}
         <select
           value={month}
           onChange={(e) => setMonth(e.target.value)}
-          className="p-3 border border-neutral-400 rounded-xl text-lg w-full md:w-1/2"
+          className="p-3 border border-neutral-400 rounded-xl text-lg w-full md:w-2/3"
         >
           <option value="">Select Month</option>
           {[
@@ -647,7 +655,7 @@ function DateQuestion({
         <input
           type="number"
           placeholder="Enter Year"
-          className="p-3 border border-neutral-400 rounded-xl text-lg w-40"
+          className="p-3 border border-neutral-400 rounded-xl text-lg w-full md:w-1/3"
           value={year}
           onChange={(e) => setYear(e.target.value)}
           min="1950"

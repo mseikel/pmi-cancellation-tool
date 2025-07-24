@@ -346,8 +346,8 @@ if (!is.na(cbsa) && cbsa != "99999") {
 
   if (nrow(hpi_match) == 0) stop("No HPI data found for CBSA or state.")
 
-  index_start <- hpi_match[Year == purchase_year & Month == purchase_month, Index_NSA]
-  index_now <- hpi_match[Year == current$current_year & Month == current$current_month, Index_NSA]
+  index_start <- hpi_match[Year == purchase_year & Month == purchase_month, Index_SA]
+  index_now <- hpi_match[Year == current$current_year & Month == current$current_month, Index_SA]
 
   if (length(index_start) == 0 || length(index_now) == 0) stop("Missing HPI index for given date.")
 
@@ -387,7 +387,7 @@ list(
   estimated_equity = round(adjusted_current_value - unpaid, -3),
   oltv = ltv$oltv,
   eltv = ltv$eltv,
-  equity_percent = round(1 - ltv$eltv, 3) * 100,
+  equity_percent = round(1 - ltv$eltv, 2) * 100,
   purchase_price = purchase_price,
   down_payment = down_payment,
   adjusted_current_value = adjusted_current_value,
