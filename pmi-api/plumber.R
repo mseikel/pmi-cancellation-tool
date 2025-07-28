@@ -227,7 +227,9 @@ determine_eligibility_group <- function(months_elapsed, eltv, oltv, equity_boost
   if (delinquency) {
     return(list(
       eligibility_level = "UNLIKELY",
-      eligibility_message = "You're probably not eligible to cancel PMI yet. This could be because of missed payments, not having enough time in the loan, or not having enough equity based on your home’s current value. Keep making on-time payments and check back again—or talk to your servicer for more details."
+      eligibility_message = paste(
+        "Servicers generally require borrowers to be <strong>current</strong> on their mortgage and have no missed payments for at least <strong>one year</strong> before considering PMI cancellation."
+      )
     ))
   }
 
@@ -235,51 +237,92 @@ determine_eligibility_group <- function(months_elapsed, eltv, oltv, equity_boost
   if (months_elapsed < 24 && !equity_boost) {
     return(list(
       eligibility_level = "UNLIKELY",
-      eligibility_message = "You're probably not eligible to cancel PMI yet. This could be because of missed payments, not having enough time in the loan, or not having enough equity based on your home’s current value. Keep making on-time payments and check back again—or talk to your servicer for more details."
+      eligibility_message = paste(
+      "Servicers generally require borrowers to make at least <strong>two years</strong> of payments before considering PMI cancellation."
+      )
     ))
-  }
+  } 
 
   # 3. Too early with equity boost, but not enough equity
   if (months_elapsed < 24 && equity_boost && eltv > 0.75) {
     return(list(
       eligibility_level = "UNLIKELY",
-      eligibility_message = "You're probably not eligible to cancel PMI yet. This could be because of missed payments, not having enough time in the loan, or not having enough equity based on your home’s current value. Keep making on-time payments and check back again—or talk to your servicer for more details."
+      eligibility_message = paste(
+      "Servicers generally require <strong>at least two years</strong> of payments and home equity of at least <strong>25%</strong> to consider PMI cancellation on mortgages <strong>less than five years</strong> old"
+      )
     ))
   }
 
-  # 4. Still too much loan remaining
-  if (eltv > 0.80) {
-    return(list(
-      eligibility_level = "UNLIKELY",
-      eligibility_message = "You're probably not eligible to cancel PMI yet. This could be because of missed payments, not having enough time in the loan, or not having enough equity based on your home’s current value. Keep making on-time payments and check back again—or talk to your servicer for more details."
-    ))
-  }
-
-  # 5. Auto-cancellation conditions
+  # 4. Auto-cancellation conditions
   if (oltv <= 0.78 || months_elapsed >= 180) {
     return(list(
       eligibility_level = "VERY LIKELY",
-      eligibility_message = "PMI should typically be removed once your loan hits 78% of the original home value or after you've reached the halfway point of a 30-year mortgage. If you're still being charged, it's worth contacting your servicer to ask why."
+      eligibility_message = paste(
+      "By law, PMI should be automatically cancelled once your loan reaches <strong>78%</strong> of the original purchase price. <br>",
+      "If you're still being charged, contact your mortgage servicer and ask why PMI hasn’t been removed."
+      )
     ))
   }
 
-  # 6. Request-cancel window based on original value
+  # 5. Request-cancel window based on original value
   if (oltv > 0.78 && oltv <= 0.80 && months_elapsed < 180) {
     return(list(
       eligibility_level = "VERY LIKELY",
-      eligibility_message = "You’re likely eligible to request PMI cancellation. Once your loan reaches 80% of the original purchase price, you can usually ask your servicer to remove it—if you’ve made on-time payments and your loan is in good standing."
+      eligibility_message = paste(
+      "Once your equity reaches <strong>20%</strong> of the original purchase price, you can ask your servicer to remove PMI."
+      )
     ))
   }
 
-  # 7. Based on current value and time in loan
+# 6A. Not enough equity yet for loan under 5 years
+if (eltv > 0.75 && months_elapsed < 60) {
+  return(list(
+    eligibility_level = "UNLIKELY",
+    eligibility_message = paste(
+      "For loans less than five years old, servicers generally require home equity of at least <strong>25%</strong> before approving PMI cancellation."
+    )
+  ))
+}
+
+# 6B. Still too much loan remaining
+if (eltv > 0.80) {
+  return(list(
+    eligibility_level = "UNLIKELY",
+    eligibility_message = paste(
+      "Servicers generally require home equity of at least <strong>20%</strong> before approving PMI cancellation."
+    )
+  ))
+}
+
+# 7A. Likely eligible – under 5 years with 25%+ equity
+if (eltv <= 0.75 && months_elapsed >= 24 && months_elapsed < 60) {
+  return(list(
+    eligibility_level = "LIKELY",
+    eligibility_message = paste(
+      "Servicers generally allow PMI cancellation on loans less than five years old if you've built at least <strong>25%</strong> equity."
+    )
+  ))
+}
+
+# 7B. Likely eligible – 5+ years with 20%+ equity
+if (eltv <= 0.80 && months_elapsed >= 60) {
+  return(list(
+    eligibility_level = "LIKELY",
+    eligibility_message = paste(
+      "Servicers generally allow cancellation if you've built at least <strong>20%</strong> equity."
+    )
+  ))
+}
+
+   # 8. Equity boost less than 24 months, but enough equity
   if (
-    (eltv <= 0.75 && months_elapsed >= 24) ||
-    (eltv <= 0.80 && months_elapsed >= 60) ||
     (eltv <= 0.75 && months_elapsed < 24 && equity_boost)
   ) {
     return(list(
-      eligibility_level = "LIKELY",
-      eligibility_message = "You may be able to cancel PMI based on your home’s current value. If you've built equity—especially through renovations or extra payments—your servicer may allow removal after verifying with an appraisal or valuation."
+      eligibility_level = "POSSIBLY",
+       eligibility_message = paste(
+      "For loans less than two years old, PMI cancellation is sometimes allowed if you've built at least <strong>25%</strong> equity through renovations or extra payments."
+    )
     ))
   }
 

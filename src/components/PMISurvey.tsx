@@ -141,65 +141,65 @@ if (step === "done") {
 
       {resultData && (
         <div className="bg-white text-left p-4 mt-4 rounded-xl border space-y-3">
-          <p>
-            {resultData.eligibility_message}
-          </p>
-          <p>
-            The typical house purchased in <strong>{resultData.cbsa_used?.[0] || resultData.state_used?.[0]} </strong>
-            {resultData.appreciation_percent >= 0 ? (
-              <>
-              <strong>rose</strong> in value by{" "}
-              </> 
-              ) : (
-              <>
-              <strong>fell</strong> in value by{" "}
-              </>
-            )}              
-            <strong>{resultData.appreciation_percent?.toLocaleString()}%</strong> between <strong>{monthName(answers.purchaseMonth)} {answers.purchaseYear} </strong> 
-            and <strong>{monthName(resultData.current_month)} {resultData.current_year}</strong>.
-          </p>
-          <p>
-            Based on your purchase price of <strong>${resultData.purchase_price?.toLocaleString()}</strong>,
-            your home would be worth around <strong>${resultData.current_home_value?.toLocaleString()}</strong> today, given area price changes.
-          </p>
-          {resultData.renovation_value > 0 && (
-            <p>
-            But since you reported a renovation value of{" "}
-            <strong>${resultData.renovation_value.toLocaleString()}</strong>, your
-            estimated current home value is{" "}
-            <strong>${resultData.adjusted_current_value.toLocaleString()}</strong>.
-            </p>
-          )}
-          <p>
-            With a down payment of <strong>${answers.downPayment?.toLocaleString()}</strong>
-            {resultData.additional_payments > 0 && (
-              <>{", additional payments of "}
-              <strong>${resultData.additional_payments.toLocaleString()}</strong>,
-              </>
-            )}
-            {" "}and
-            {" "}
-            {answers.interestRate == null
-              ? "an estimated "
-    :           "a reported "}
-            mortgage rate of <strong>{(resultData.interest_rate * 100).toFixed(1)}%</strong>,
-            your remaining loan balance is likely about <strong>${resultData.unpaid_balance?.toLocaleString()}</strong>.
-          </p>
-          <p>
-            Taking into account your home’s appreciation and principal payments, 
-            your estimated equity is <strong>${resultData.estimated_equity?.toLocaleString()}</strong>,
-            representing <strong>{resultData.equity_percent?.toLocaleString()}%</strong> of your current home value.         
-            </p>
-          <p>
-            Without any additional or missed payments, your PMI would likely automatically cancel around <strong>{resultData.auto_cancel_date}</strong>.
-          </p>
-          {resultData?.eligibility_level != "UNLIKELY" && (
-            <p>
-            Requesting cancellation now could save you an estimated{" "}
-            <strong>${resultData.estimated_pmi_savings?.toLocaleString()}</strong>{" "}
-            in PMI fees.
-          </p>
-      )}
+          {resultData?.eligibility_message && (
+          <p
+            dangerouslySetInnerHTML={{ __html: resultData.eligibility_message }}
+          />
+        )}
+      <p>
+        Here’s how your responses translated into PMI eligibility:
+      </p>
+          <ul className="list-disc list-outside pl-7 space-y-3">
+  
+  <li>
+    The typical house purchased in <strong>{resultData.cbsa_used?.[0] || resultData.state_used?.[0]}</strong>{" "}
+    {resultData.appreciation_percent >= 0 ? (
+      <> <strong>rose</strong> </> 
+    ) : (
+      <> <strong>fell</strong> </> 
+    )}
+    in value by <strong>{resultData.appreciation_percent?.toLocaleString()}%</strong> between
+    <strong> {monthName(answers.purchaseMonth)} {answers.purchaseYear} </strong> and
+    <strong> {monthName(resultData.current_month)} {resultData.current_year}</strong>.
+  </li>
+
+  <li>
+    Your home, originally purchased for <strong>${resultData.purchase_price?.toLocaleString()}</strong>, would now be worth around <strong>${resultData.current_home_value?.toLocaleString()}</strong> based on area price trends.
+  </li>
+
+  {resultData.renovation_value > 0 && (
+    <li>
+      With a reported renovation value of <strong>${resultData.renovation_value.toLocaleString()}</strong>, your estimated home value increases to <strong>${resultData.adjusted_current_value.toLocaleString()}</strong>.
+    </li>
+  )}
+
+  <li>
+    With a down payment of <strong>${answers.downPayment?.toLocaleString()}</strong>
+    {resultData.additional_payments > 0 && (
+      <>
+        , additional payments of <strong>${resultData.additional_payments.toLocaleString()}</strong>
+      </>
+    )}
+    , and{" "}
+    {answers.interestRate == null
+      ? "an estimated "
+      : "a reported "}
+    mortgage rate of <strong>{(resultData.interest_rate * 100).toFixed(1)}%</strong>,
+    your remaining loan balance is approximately <strong>${resultData.unpaid_balance?.toLocaleString()}</strong>.
+  </li>
+
+  <li>
+    Your estimated home equity is <strong>${resultData.estimated_equity?.toLocaleString()}</strong>, which is <strong>{resultData.equity_percent?.toLocaleString()}%</strong> of your current home value.
+  </li>
+</ul>
+<p>
+  Without any additional or missed payments, your PMI would likely automatically cancel around <strong>{resultData.auto_cancel_date}</strong>.
+  {["LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
+  <> Requesting cancellation now could save you <strong>${resultData.estimated_pmi_savings?.toLocaleString()}</strong> in PMI fees.</>
+)}
+
+</p>
+
         </div>
       )}
        
@@ -290,7 +290,7 @@ const renderStep = () => {
 
         <p className="text-xl md:text-3xl leading-relaxed mt-12 mb-6 max-w-5xl">
           Answer a few quick questions to find out
-          if you're one of over <strong>2 million</strong> homeowners likely eligible to save an average of <strong>$1,200</strong> each year.
+          if you're one of over <strong>2 million</strong> homeowners likely eligible to save <strong>$1,200</strong> a year.
         </p>
 
       <div className="flex flex-col md:flex-row justify-center gap-4 w-full max-w-xl mx-auto">
