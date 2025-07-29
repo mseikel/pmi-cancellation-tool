@@ -7,10 +7,11 @@ export default function App() {
   return (
     <main className="font-sans text-neutral-900 bg-[#cbddd1] scroll-smooth">
       <Routes>
-        <Route path="/" element={<HeroSection />} />
+        <Route index element={<HeroSection />} />        
         <Route path="/learn" element={<LearnMore />} />
-        <Route path="/quiz" element={<PMISurvey />} /> {/* ✅ NEW LINE */}
+        <Route path="/quiz" element={<PMISurvey />} />
       </Routes>
     </main>
   );
 }
+
