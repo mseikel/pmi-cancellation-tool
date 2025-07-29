@@ -258,7 +258,7 @@ determine_eligibility_group <- function(months_elapsed, eltv, oltv, equity_boost
     return(list(
       eligibility_level = "VERY LIKELY",
       eligibility_message = paste(
-      "By law, PMI should be automatically cancelled once your loan reaches <strong>78%</strong> of the original purchase price. <br>",
+      "By law, PMI should be automatically cancelled once your loan reaches <strong>78%</strong> of the original purchase price. <br><br>",
       "If you're still being charged, contact your mortgage servicer and ask why PMI hasn’t been removed."
       )
     ))
@@ -267,7 +267,7 @@ determine_eligibility_group <- function(months_elapsed, eltv, oltv, equity_boost
   # 5. Request-cancel window based on original value
   if (oltv > 0.78 && oltv <= 0.80 && months_elapsed < 180) {
     return(list(
-      eligibility_level = "VERY LIKELY",
+      eligibility_level = "LIKELY",
       eligibility_message = paste(
       "Once your equity reaches <strong>20%</strong> of the original purchase price, you can ask your servicer to remove PMI."
       )
