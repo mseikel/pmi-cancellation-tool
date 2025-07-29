@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 // ================================
 
 type SurveyStep =
+  | "start"
   | "step1_conventional"
   | "step2_purchase"
   | "step3_date"
@@ -37,15 +38,6 @@ function monthName(monthNumber: number): string {
 // ================================
 
 /**
- * List of all U.S. states and D.C. (2-letter abbreviations)
- */
-const STATES = [
-  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA",
-  "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI",
-  "SC", "SD", "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"
-];
-
-/**
  * Ordered list of survey steps for progress tracking
  */
 const steps: SurveyStep[] = [
@@ -62,10 +54,10 @@ const steps: SurveyStep[] = [
 // ================================
 // Main Survey Component
 // ================================
-export function PMISurvey(): JSX.Element {
+export function PMISurvey() {
   const [step, setStep] = useState<SurveyStep>("start");
-  const [answers, setAnswers] = useState<{ [key: string]: any }>({});
   const [resultMessage, setResultMessage] = useState<string | null>(null);
+  const [answers, setAnswers] = useState<{ [key: string]: any }>({});
   const [resultData, setResultData] = useState<any | null>(null);
   const handleAnswer = (
   keyOrObject: string | { [key: string]: any },
@@ -602,7 +594,6 @@ const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 }
 
 function DateQuestion({
-  prompt,
   onSubmit,
 }: {
   prompt: string;
@@ -714,7 +705,9 @@ function ZipCodeQuestion({
         {digits.map((digit, i) => (
           <input
             key={i}
-            ref={(el) => (inputsRef.current[i] = el!)}
+            ref={(el) => {
+              inputsRef.current[i] = el!;
+        }}
             type="text"
             maxLength={1}
             value={digit}
@@ -729,59 +722,6 @@ function ZipCodeQuestion({
         onClick={() => onSubmit(zipCode)}
         disabled={!isValid}
         className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed mt-6"
-      >
-        Continue
-      </button>
-    </div>
-  );
-}
-
-function StateQuestion({
-  prompt,
-  onSubmit,
-}: {
-  prompt: string;
-  onSubmit: (state: string) => void;
-}) {
-  const [state, setState] = useState("");
-
-  const isValid = state !== "";
-
-  const states = [
-    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-    "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-    "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-    "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-    "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
-    "DC"
-  ];
-
-  return (
-    <div className="text-center space-y-6">
-      {/* Question text */}
-      <h2 className="text-3xl font-semibold text-center">{prompt}</h2>
-
-      {/* Dropdown */}
-      <div className="max-w-xs mx-auto">
-        <select
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-          className="w-full p-3 border border-neutral-400 rounded-xl text-lg"
-        >
-          <option value="">Select State</option>
-          {states.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Continue button */}
-      <button
-        onClick={() => onSubmit(state)}
-        disabled={!isValid}
-        className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Continue
       </button>

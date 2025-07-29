@@ -1,8 +1,7 @@
-import React from 'react';
 import { FadeInWhenVisible } from './FadeInWhenVisible';
 import { Link } from 'react-router-dom';
 
-export function LearnMore(): JSX.Element {
+export function LearnMore() {
   return (
     <div className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
       

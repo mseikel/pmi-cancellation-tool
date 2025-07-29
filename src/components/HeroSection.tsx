@@ -1,9 +1,7 @@
 // HeroSection.tsx
-import React from 'react';
-import { ArrowDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export function HeroSection(): JSX.Element {
+export function HeroSection() {
   return (
     <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 py-12">
       <h1 className="font-heading text-2xl md:text-5xl tracking-wider uppercase">
