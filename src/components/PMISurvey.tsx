@@ -103,7 +103,7 @@ useEffect(() => {
     try {
       console.log("📦 Submitting to API:", payload);
 
-      const response = await fetch("http://127.0.0.1:8000/pmi-check", {
+      const response = await fetch("https://pmi-cancellation-api.onrender.com/pmi-check", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
