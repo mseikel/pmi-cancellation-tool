@@ -124,7 +124,7 @@ useEffect(() => {
 
 if (step === "done") {
   return (
-    <div className="p-6 max-w-xl mx-auto text-center space-y-6">
+    <div className="h-screen w-full flex flex-col justify-center items-center p-6 max-w-xl mx-auto text-center space-y-6">
 <h2 className="text-4xl font-semibold">
   {resultData && resultData.eligibility_level
     ? `You’re ${resultData.eligibility_level} eligible for PMI cancellation.`

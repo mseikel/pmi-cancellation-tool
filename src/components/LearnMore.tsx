@@ -24,7 +24,7 @@ export function LearnMore() {
 
         <FadeInWhenVisible>
           <div className="flex justify-end gap-16 items-start text-right">
-            <img src="/home-icon.png" alt="Home icon" className="w-40 h-40 flex-shrink-0" />
+            <img src={`${import.meta.env.BASE_URL}home-icon.png`} alt="Home icon" className="w-40 h-40 flex-shrink-0" />
             <p className="text-xl md:text-2xl leading-snug max-w-xl">
               But many people,<br />especially <strong>first-time homebuyers</strong>,<br />don’t have <strong>$83,000</strong> saved to purchase <br />the average <strong>$415,000</strong> house.
             </p>
@@ -41,13 +41,13 @@ export function LearnMore() {
           </p>
         </FadeInWhenVisible>
         <FadeInWhenVisible>
-          <img src="/bank-icon.png" alt="Bank icon" className="w-40 h-auto mx-auto" />
+          <img src={`${import.meta.env.BASE_URL}bank-icon.png`} alt="Bank icon" className="w-40 h-auto mx-auto" />
         </FadeInWhenVisible>
       </section>
 
            {/* SECTION 4 – COST + DEFAULT PROTECTION */}
       <section className="snap-start h-screen flex flex-col justify-center items-center px-6 py-16 max-w-3xl mx-auto text-center text-lg leading-relaxed text-black space-y-6 relative">
-        <img src="/dollar-icon.png" alt="Dollar icon" className="place-self-end w-24 h-24 rotate-[30deg]" />
+        <img src={`${import.meta.env.BASE_URL}dollar-icon.png`} alt="Dollar icon" className="place-self-end w-24 h-24 rotate-[30deg]" />
         <FadeInWhenVisible>
           <p className="text-xl md:text-2xl leading-snug max-w-2xl mx-auto">
             With <strong>PMI</strong>, consumers often make a down payment <br />
@@ -57,7 +57,7 @@ export function LearnMore() {
             mortgage insurers roughly <strong>$100</strong> a month.
           </p>
         </FadeInWhenVisible>
-        <img src="/dollar-icon.png" alt="Dollar icon" className="place-self-start w-24 h-24 rotate-[-30deg]" />
+        <img src={`${import.meta.env.BASE_URL}dollar-icon.png`} alt="Dollar icon" className="place-self-start w-24 h-24 rotate-[-30deg]" />
       </section>
 
       {/* SECTION 5 – PMI CANCELLATION + LENDER SAFETY */}
@@ -77,7 +77,7 @@ export function LearnMore() {
         </FadeInWhenVisible>
         {/* <FadeInWhenVisible> */}
           <img
-            src="/check-icon.png"
+            src={`${import.meta.env.BASE_URL}check-icon.png`}
             className="hidden md:block absolute right-[10%] top-[50%] -translate-y-1/3 w-40 h-40 object-contain"
           />
         {/* </FadeInWhenVisible> */}
@@ -88,7 +88,7 @@ export function LearnMore() {
         <FadeInWhenVisible>
           <div className="flex justify-end items-start gap-16 w-full">
             <img
-              src="/graph-icon.png"
+              src={`${import.meta.env.BASE_URL}graph-icon.png`}
               alt="Graph icon"
               className="w-[200px] h-[200px] flex-shrink-0 mt-1"
             />
@@ -118,7 +118,7 @@ export function LearnMore() {
             </p>
             <div className="flex justify-center">
               <img
-                src="/usa-icon.png"
+                src={`${import.meta.env.BASE_URL}usa-icon.png`}
                 alt="USA icon"
                 className="w-[300px] h-[300px] object-contain"
               />
@@ -137,7 +137,7 @@ export function LearnMore() {
               <strong>equity</strong> based on current prices.
             </p>
             <img
-              src="/tech-icon.png"
+              src={`${import.meta.env.BASE_URL}tech-icon.png`}
               alt="Technology icon"
               className="w-40 h-40 object-contain flex-shrink-0 -mt-8 mr-10"
             />
