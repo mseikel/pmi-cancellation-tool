@@ -101,10 +101,13 @@ useEffect(() => {
     };
 
     try {
+      const API_BASE = "https://pmi-cancellation-api.onrender.com";
+
       console.log("📦 Submitting to API:", payload);
 
-      const response = await fetch("https://pmi-cancellation-api.onrender.com/pmi-check", {
-        method: "POST",
+
+const response = await fetch(`${API_BASE}/pmi-check`, {
+  method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -122,17 +125,29 @@ useEffect(() => {
   fetchEligibility();
 }, [step, answers]);
 
+const [dotCount, setDotCount] = useState(1);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setDotCount((prev) => (prev < 3 ? prev + 1 : 1));
+  }, 500); // update every half second
+
+  return () => clearInterval(interval); // clean up on unmount
+}, []);
+
+
 if (step === "done") {
   return (
-    <div className="h-screen w-full flex flex-col justify-center items-center p-6 max-w-xl mx-auto text-center space-y-6">
-<h2 className="text-4xl font-semibold">
+<div className="min-h-screen w-full px-6 py-16 max-w-3xl mx-auto text-center space-y-6">
+  <h2 className="text-4xl font-semibold">
   {resultData && resultData.eligibility_level
     ? `You’re ${resultData.eligibility_level} eligible for PMI cancellation.`
-    : "Checking eligibility..."}
+    : `Checking eligibility${".".repeat(dotCount)}`
+}
 </h2>
 
       {resultData && (
-        <div className="bg-white text-left p-4 mt-4 rounded-xl border space-y-3">
+<div className="bg-white text-left p-4 mt-4 rounded-xl border space-y-3 w-full max-w-xl mx-auto">
           {resultData?.eligibility_message && (
           <p
             dangerouslySetInnerHTML={{ __html: resultData.eligibility_message }}
@@ -455,19 +470,29 @@ switch (step) {
 };
 
 const currentStepIndex = steps.indexOf(step);
-const progressPercent = ((currentStepIndex + 1) / steps.length) * 100;
+const progressPercent = (currentStepIndex / (steps.length - 1)) * 100;
 const showProgressBar = steps.includes(step);
 
 return (
   <div className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth text-black">
     {/* ✅ Conditionally show progress bar */}
     {showProgressBar && (
-      <div className="fixed top-0 left-0 w-full h-2 bg-neutral-300 z-50">
-        <div
-          className="h-full bg-green-800 transition-all duration-500"
-          style={{ width: `${progressPercent}%` }}
-        />
-      </div>
+      <div className="fixed bottom-12 left-0 w-full px-6 z-50">
+  <div className="relative w-full h-4 bg-neutral-300 rounded-full">
+    {/* Progress fill */}
+    <div
+      className="absolute top-0 left-0 h-4 bg-green-800 rounded-full transition-all duration-500"
+      style={{ width: `${progressPercent}%` }}
+    />
+    {/* Labels */}
+    <div className="absolute top-full mt-1 w-full flex justify-between text-xs text-black font-semibold px-1">
+      <span>Start</span>
+      <span>{Math.round(progressPercent)}%</span>
+      <span>Results</span>
+    </div>
+  </div>
+</div>
+
     )}
 
     {/* ✅ Main Section */}
@@ -557,16 +582,23 @@ const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 <input
   type="text"
   className="w-60 p-3 border border-neutral-400 rounded-xl text-lg"
-  value={rate !== "" ? `${rate}%` : ""}
-  onChange={handleInput}
-  onFocus={() => setRate(rate.replace(/[^\d.]/g, ""))}
+  value={rate}
+  onChange={(e) => {
+    const raw = e.target.value.replace(/[^\d.]/g, "");
+    setRate(raw);
+  }}
+  onFocus={() => {
+    // strip % if it was added on blur
+    setRate(rate.replace(/[^\d.]/g, ""));
+  }}
   onBlur={() => {
     if (rate !== "" && !isNaN(parseFloat(rate))) {
-      setRate(parseFloat(rate).toString());
+      setRate(`${parseFloat(rate).toString()}%`);
     }
   }}
   placeholder="4.5%"
 />
+
 
 
       </div>
@@ -602,19 +634,28 @@ function DateQuestion({
   const [month, setMonth] = useState<string>("");
   const [year, setYear] = useState<string>("");
 
-  const parsedYear = parseInt(year);
+  const [isValid, setIsValid] = useState(false);
 
-  const isValid =
-    month &&
-    year &&
+useEffect(() => {
+  const parsedYear = parseInt(year);
+  const valid =
+    !!month &&
+    !!year &&
     /^\d{4}$/.test(year) &&
     parsedYear >= 1990 &&
     parsedYear <= 2050;
 
-  const handleSubmit = () => {
-    const date = new Date(parsedYear, +month - 1); // JS months are 0-indexed
-    onSubmit(date);
-  };
+  setIsValid(valid);
+}, [month, year]);
+
+
+const handleSubmit = () => {
+  const parsedYear = parseInt(year);
+  const parsedMonth = parseInt(month);
+  const date = new Date(parsedYear, parsedMonth - 1);
+  onSubmit(date);
+};
+
 
   return (
     <div className="text-center space-y-6">
@@ -649,7 +690,7 @@ function DateQuestion({
           className="p-3 border border-neutral-400 rounded-xl text-lg w-full md:w-1/3"
           value={year}
           onChange={(e) => setYear(e.target.value)}
-          min="1950"
+          min="1990"
           max="2050"
         />
       </div>
@@ -1114,21 +1155,27 @@ function PurchaseQuestion({
   downPercentValid &&
   priceValid;
 
-  const handleSync = (source: "dollar" | "percent", value: string) => {
-    if (source === "dollar") {
-      setDownDollar(value);
-      const val = parseFloat(value);
-      if (!isNaN(val) && parsedPrice > 0) {
-        setDownPercent(((val / parsedPrice) * 100).toFixed(1));
-      }
-    } else {
-      setDownPercent(value);
-      const val = parseFloat(value);
-      if (!isNaN(val) && parsedPrice > 0) {
-        setDownDollar(((val / 100) * parsedPrice).toFixed(0));
-      }
+const handleSync = (source: "dollar" | "percent", value: string) => {
+  const val = parseFloat(value);
+
+  if (source === "dollar") {
+    setDownDollar(value);
+    setDownPercent(""); // clear manual entry in percent field
+
+    if (!isNaN(val) && parsedPrice > 0) {
+      const calc = (val / parsedPrice) * 100;
+      setDownPercent(`${calc.toFixed(1)}%`);
     }
-  };
+  } else {
+    setDownPercent(value);
+    setDownDollar(""); // clear manual entry in dollar field
+
+    if (!isNaN(val) && parsedPrice > 0) {
+      setDownDollar(((val / 100) * parsedPrice).toFixed(0));
+    }
+  }
+};
+
 
   return (
     <div className="text-center space-y-6">
@@ -1158,9 +1205,12 @@ function PurchaseQuestion({
       : ""
   }
   onChange={(e) => {
-    const raw = e.target.value.replace(/[^\d]/g, "");
-    setPrice(raw);
-  }}
+  const raw = e.target.value.replace(/[^\d]/g, "");
+  setPrice(raw);
+  setDownDollar("");
+  setDownPercent("");
+}}
+
   onBlur={(e) => {
     const raw = e.target.value.replace(/[^\d]/g, "");
     setPrice(raw);
