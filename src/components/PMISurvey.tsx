@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef} from "react";
-import { Info } from "lucide-react";
 import { Link } from "react-router-dom";
+import InfoTooltip from "./InfoTooltip";
 
 // ================================
 // Survey Step Type Definitions
@@ -329,28 +329,22 @@ switch (step) {
               conventional mortgage?
             </span>
             
-            <span className="relative inline-block align-middle ml-2 group">
-              <Info
-                size={18}
-                className="text-green-800 hover:text-green-900 transition-colors cursor-pointer"
-            />
-              <div className="absolute left-1/2 bottom-full z-50 w-80 -translate-x-1/2 mb-2 px-4 py-3 bg-white text-sm text-black rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto font-normal text-center">
-                Most mortgages are {" "}
-                <a
-                  href="https://www.consumerfinance.gov/owning-a-home/conventional-loans/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline text-green-800 hover:text-green-900"
-                >
-                  conventional
-                </a>{" "}
-                loans.
-                <br />
-                <br />
-                If you have an <strong>FHA, VA, or USDA</strong> loan and/or your mortgage is for a term <br />
-                <strong>less than</strong> 30 years, select "<strong>No</strong>".
-              </div>
-            </span>
+            <InfoTooltip className="inline-block align-middle ml-2">
+              Most mortgages are {" "}
+              <a
+                href="https://www.consumerfinance.gov/owning-a-home/conventional-loans/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-green-800 hover:text-green-900"
+              >
+                conventional
+              </a>{" "}
+              loans.
+              <br />
+              <br />
+              If you have an <strong>FHA, VA, or USDA</strong> loan and/or your mortgage is for a term <br />
+              <strong>less than</strong> 30 years, select "<strong>No</strong>".
+            </InfoTooltip>
           </h2>
         }
         options={[
@@ -562,18 +556,12 @@ const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         What is your mortgage <br />
         <span className="inline-flex items-center justify-center gap-2">
           interest rate?
-          <span className="relative group">
-            <Info
-              size={18}
-              className="text-green-800 hover:text-green-900 cursor-pointer"
-            />
-            <div className="absolute left-1/2 bottom-full z-50 w-80 -translate-x-1/2 mb-2 px-4 py-3 bg-white text-sm text-black rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto font-normal text-center">
-              This is the <strong>annual interest rate</strong> on your mortgage, <strong>not</strong> your APR.
-              <br /><br />
-              Find your interest rate on the first page of your <strong>closing disclosure</strong>. <br /><br />
-              It's okay if you don't know – instead we'll use the <strong>average interest rate</strong> in the month you purchased your home.
-            </div>
-          </span>
+          <InfoTooltip>
+            This is the <strong>annual interest rate</strong> on your mortgage, <strong>not</strong> your APR.
+            <br /><br />
+            Find your interest rate on the first page of your <strong>closing disclosure</strong>. <br /><br />
+            It's okay if you don't know – instead we'll use the <strong>average interest rate</strong> in the month you purchased your home.
+          </InfoTooltip>
         </span>
       </h2>
 
@@ -790,26 +778,21 @@ function CreditScoreQuestion({
     <div className="text-center space-y-6">
       <h2 className="text-3xl font-semibold text-center">
         What is your credit score range?
-        <span className="relative inline-block align-middle ml-2 group">
-          <Info
-            size={18}
-            className="text-green-800 hover:text-green-900 cursor-pointer"
-          />
-          <div className="absolute left-1/2 bottom-full z-50 w-96 -translate-x-1/2 mb-2 px-4 py-3 bg-white text-sm text-black rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto font-normal text-center">
-            Your credit score will <strong>not</strong> affect your eligibility for cancellation, but it will help estimate savings.
-            <br /><br />
-            You can often find your{" "}
-      <a
-        href="https://www.consumerfinance.gov/ask-cfpb/where-can-i-get-my-credit-scores-en-316/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="underline text-green-800 hover:text-green-900"
-      >
-        credit score
-      </a> through your credit card company or other free sources.<br /><br />
-      If you don't know or prefer not to say, we’ll use PMI pricing for credit scores between <strong>720 and 760</strong>.
-          </div>
-        </span>
+        <InfoTooltip className="inline-block align-middle ml-2">
+          Your credit score will <strong>not</strong> affect your eligibility for cancellation, but it will help estimate savings.
+          <br /><br />
+          You can often find your{" "}
+          <a
+            href="https://www.consumerfinance.gov/ask-cfpb/where-can-i-get-my-credit-scores-en-316/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-green-800 hover:text-green-900"
+          >
+            credit score
+          </a> through your credit card company or other free sources.
+          <br /><br />
+          If you don't know or prefer not to say, we’ll use PMI pricing for credit scores between <strong>720 and 760</strong>.
+        </InfoTooltip>
       </h2>
 
       <div className="w-60 mx-auto">
@@ -901,19 +884,11 @@ function DelinquencyQuestion({
       <h2 className="text-3xl font-semibold text-center">
         <span className="inline-block">
           Have you recently missed any mortgage payments?
-          <span className="relative inline-flex align-baseline ml-2 group">
-            <Info
-              size={18}
-              className="text-green-800 hover:text-green-900 cursor-pointer"
-            />
-            <div className="absolute left-1/2 bottom-full z-50 w-96 -translate-x-1/2 mb-2 px-4 py-3 bg-white text-sm text-black rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto font-normal text-center">
-        <strong>Missed payments</strong> generally mean
-        <strong> 30 or more days</strong> past due, not just a few days late.
-        <br /><br />
-        Check your payment history by reviewing your
-        <strong> credit report</strong> or contacting your servicer.
-            </div>
-          </span>
+          <InfoTooltip className="inline-flex align-baseline ml-2">
+            <strong>Missed payments</strong> generally mean <strong>30 or more days</strong> past due, not just a few days late.
+            <br /><br />
+            Check your payment history by reviewing your <strong>credit report</strong> or contacting your servicer.
+          </InfoTooltip>
         </span>
       </h2>
 
@@ -1029,16 +1004,9 @@ function EquityBoostQuestion({
     <div className="text-center space-y-6">
       <h2 className="text-3xl font-semibold text-center">
         Have you made renovations or additional mortgage payments?
-        <span className="relative inline-block align-middle ml-2 group">
-          <Info
-            size={18}
-            className="text-green-800 hover:text-green-900 cursor-pointer"
-          />
-          <div className="absolute left-1/2 bottom-full z-50 w-96 -translate-x-1/2 mb-2 px-4 py-3 bg-white text-sm text-black rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto font-normal text-center">
-            If you’ve made <strong>extra payments</strong> on your mortgage or completed <strong>major renovations</strong>
-            — like a new kitchen or finished basement — you may have <strong>more equity</strong> than this tool assumes.
-          </div>
-        </span>
+        <InfoTooltip className="inline-block align-middle ml-2">
+          If you’ve made <strong>extra payments</strong> on your mortgage or completed <strong>major renovations</strong> — like a new kitchen or finished basement — you may have <strong>more equity</strong> than this tool assumes.
+        </InfoTooltip>
       </h2>
 
       <div className="flex flex-col md:flex-row justify-center gap-4 pt-4">
@@ -1063,15 +1031,9 @@ function EquityBoostQuestion({
       <div>
         <label className="block text-lg text-center pb-2 font-medium">
           Renovation Value
-          <span className="relative inline-block align-middle ml-2 group">
-            <Info
-              size={16}
-              className="text-green-800 hover:text-green-900 cursor-pointer"
-            />
-            <div className="absolute left-1/2 bottom-full z-50 w-80 -translate-x-1/2 mb-2 px-4 py-3 bg-white text-sm text-black rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto font-normal text-center">
-              Rough estimate of how much your home value increased from completed renovations.
-            </div>
-          </span>
+          <InfoTooltip size={16} className="inline-block align-middle ml-2">
+            Rough estimate of how much your home value increased from completed renovations.
+          </InfoTooltip>
         </label>
         <input
           type="text"
@@ -1086,15 +1048,9 @@ function EquityBoostQuestion({
       <div>
         <label className="block text-lg text-center pb-2 font-medium">
           Additional Payments
-          <span className="relative inline-block align-middle ml-2 group">
-            <Info
-              size={16}
-              className="text-green-800 hover:text-green-900 cursor-pointer"
-            />
-            <div className="absolute left-1/2 bottom-full z-50 w-80 -translate-x-1/2 mb-2 px-4 py-3 bg-white text-sm text-black rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto font-normal text-center">
-              Estimate of how much extra principal you've paid beyond your scheduled payments.
-            </div>
-          </span>
+          <InfoTooltip size={16} className="inline-block align-middle ml-2">
+            Estimate of how much extra principal you've paid beyond your scheduled payments.
+          </InfoTooltip>
         </label>
         <input
           type="text"
@@ -1183,18 +1139,12 @@ const handleSync = (source: "dollar" | "percent", value: string) => {
 
       <div className="space-y-2">
         <label className="block text-left text-lg font-medium flex items-center gap-2">
-  Original Purchase Price 
-  <div className="relative group">
-    <Info
-      size={16}
-      className="text-green-800 hover:text-green-900 cursor-pointer"
-    />
-    <div className="absolute left-1/2 bottom-full z-50 w-80 -translate-x-1/2 mb-2 px-4 py-3 bg-white text-sm text-black rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto font-normal text-center">
+  Original Purchase Price
+  <InfoTooltip size={16}>
       This is the <strong>full price</strong> you paid at <strong>closing</strong>.<br /><br />
       Find it on your <strong>closing dislosure</strong> as the "sale price of property" or check the <br />
       price history on <strong>Zillow</strong> or <strong> Redfin</strong>.
-    </div>
-  </div>
+  </InfoTooltip>
 </label>
         <input
   type="text"
@@ -1225,16 +1175,10 @@ const handleSync = (source: "dollar" | "percent", value: string) => {
 
         <label className="block text-left text-lg font-medium mt-4 flex items-center gap-2">
   Down Payment
-  <div className="relative group">
-    <Info
-      size={16}
-      className="text-green-800 hover:text-green-900 cursor-pointer"
-    />
-    <div className="absolute left-1/2 bottom-full z-50 w-80 -translate-x-1/2 mb-2 px-4 py-3 bg-white text-sm text-black rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto font-normal text-center">
+  <InfoTooltip size={16}>
       This is the <strong>purchase price</strong> minus the <strong>original mortgage amount</strong>.<br /><br />
       Find it on your <strong>closing disclosure</strong> under "down payment/funds from borrower."
-    </div>
-  </div>
+  </InfoTooltip>
 </label>
 
         <div className="flex flex-col md:flex-row items-center gap-4 w-full">
