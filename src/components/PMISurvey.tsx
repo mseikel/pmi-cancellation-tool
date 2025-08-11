@@ -7,17 +7,17 @@ import InfoTooltip from "./InfoTooltip";
 // ================================
 
 type SurveyStep =
-  | "start"
   | "step1_conventional"
-  | "step2_purchase"
-  | "step3_date"
-  | "step4_zip"
-  | "step5_interest"
-  | "step6_credit_score"
-  | "step7_delinquency"
+  | "step2_delinquency"
+  | "step3_purchase"
+  | "step4_date"
+  | "step5_zip"
+  | "step6_interest"
+  | "step7_credit_score"
   | "step8_equity_boost"
   | "done"
   | "exit_non_conventional"
+  | "exit_delinquent"
   | "exit_high_downpayment";
 
 /**
@@ -42,12 +42,12 @@ function monthName(monthNumber: number): string {
  */
 const steps: SurveyStep[] = [
   "step1_conventional",
-  "step2_purchase",
-  "step3_date",
-  "step4_zip",
-  "step5_interest",
-  "step6_credit_score",
-  "step7_delinquency",
+  "step2_delinquency",
+  "step3_purchase",
+  "step4_date",
+  "step5_zip",
+  "step6_interest",
+  "step7_credit_score",
   "step8_equity_boost"
 ];
 
@@ -55,7 +55,7 @@ const steps: SurveyStep[] = [
 // Main Survey Component
 // ================================
 export function PMISurvey() {
-  const [step, setStep] = useState<SurveyStep>("start");
+  const [step, setStep] = useState<SurveyStep>("step1_conventional");
   const [resultMessage, setResultMessage] = useState<string | null>(null);
   const [answers, setAnswers] = useState<{ [key: string]: any }>({});
   const [resultData, setResultData] = useState<any | null>(null);
@@ -139,6 +139,7 @@ useEffect(() => {
 if (step === "done") {
   return (
 <div className="min-h-screen w-full px-6 py-16 max-w-3xl mx-auto text-center space-y-6">
+
   <h2 className="text-4xl font-semibold">
   {resultData && resultData.eligibility_level
     ? `You’re ${resultData.eligibility_level} eligible for PMI cancellation.`
@@ -200,15 +201,26 @@ if (step === "done") {
   </li>
 </ul>
 <p>
-  Without any additional or missed payments, your PMI would likely automatically cancel around <strong>{resultData.auto_cancel_date}</strong>.
+  {["UNLIKELY", "LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
+  <> Without any additional or missed payments, your PMI would likely automatically cancel around <strong>{resultData.auto_cancel_date}</strong>.</>
+)}
   {["LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
-  <> Requesting cancellation now could save you <strong>${resultData.estimated_pmi_savings?.toLocaleString()}</strong> in PMI fees.</>
+  <> <br /><br />
+  Requesting cancellation now could save you <strong>${resultData.estimated_pmi_savings?.toLocaleString()}</strong> in PMI fees.</>
 )}
 
 </p>
 
+
         </div>
+        
       )}
+        <div className="bg-green-900 text-white text-sm md:text-base p-4 rounded-xl w-full max-w-xl mx-auto">
+  <strong>Disclaimer:</strong> This tool only provides an estimate and does not guarantee PMI cancellation.
+Your servicer may require a $50–$500 appraisal or broker price opinion to verify your home’s value.
+</div>
+      {/* Disclaimer Footer */}
+
        
       {/* Debug info only visible in development */}
       {process.env.NODE_ENV === "development" && (
@@ -237,6 +249,37 @@ if (step === "exit_non_conventional") {
       <p className="text-xl md:text-3xl leading-relaxed mt-12 mb-6 max-w-5xl">
         But you can still take action by exploring our resources
         and templates for contacting servicers.
+      </p>
+      <div className="flex flex-col md:flex-row gap-4 w-full justify-center">
+        <Link
+          to="/learn"
+          className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold text-center w-full md:w-auto"
+        >
+          LEARN MORE
+        </Link>
+
+        <Link
+          to="/#resources"
+          className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold text-center w-full md:w-auto"
+        >
+          TAKE ACTION
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+if (step === "exit_delinquent") {
+  return (
+    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-3xl mx-auto space-y-6">
+      <h1 className="font-heading text-3xl md:text-5xl tracking-wider uppercase">
+        PMI cancellation likely isn’t available right now.
+      </h1>
+      <p className="text-xl md:text-3xl leading-relaxed mt-12 mb-6 max-w-5xl">
+        Mortgage accounts must be <strong>current</strong> and have a recent history of <strong>on-time payments </strong> 
+        before servicers will cancel PMI.
+        <br /><br />
+        In the meantime, here are some resources that may help you plan your next steps.
       </p>
       <div className="flex flex-col md:flex-row gap-4 w-full justify-center">
         <Link
@@ -288,44 +331,13 @@ if (step === "exit_high_downpayment") {
 }
 
 const renderStep = () => {
-  if (step === "start") {
-    return (
-      <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-5xl mx-auto">
-        <h1 className="font-heading text-3xl md:text-5xl tracking-wider uppercase">
-          Are you paying <br /> <span className="font-bold">unnecessary</span> PMI?
-        </h1>
-
-        <p className="text-xl md:text-3xl leading-relaxed mt-12 mb-6 max-w-5xl">
-          Answer a few quick questions to find out
-          if you're one of over <strong>2 million</strong> homeowners likely eligible to save <strong>$1,200</strong> a year.
-        </p>
-
-      <div className="flex flex-col md:flex-row justify-center gap-4 w-full max-w-xl mx-auto">
-        <a
-          href="/learn"
-          className="w-full md:w-auto text-center bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold"
-        >
-          WHAT IS PMI?
-        </a>
-        <button
-        onClick={() => setStep("step1_conventional")}
-        className="w-full md:w-auto text-center bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold"
-        >
-        START SURVEY
-        </button>
-      </div>
-    </div>
-  );
-}
-
-switch (step) {
-  case "step1_conventional":
+  if (step === "step1_conventional") {
     return (
       <Question
         prompt={
           <h2 className="text-3xl font-semibold text-center">
             <span className="inline">
-              Do you have a 30-year <br /> 
+              Do you have a <br className="md:hidden" /> 30-year <br className="hidden md:block" /> 
               conventional mortgage?
             </span>
             
@@ -342,20 +354,41 @@ switch (step) {
               loans.
               <br />
               <br />
-              If you have an <strong>FHA, VA, or USDA</strong> loan and/or your mortgage is for a term <br />
+              If you have an <strong>FHA, VA, USDA, or Jumbo</strong> loan and/or your mortgage is for a term <br />
               <strong>less than</strong> 30 years, select "<strong>No</strong>".
             </InfoTooltip>
           </h2>
         }
         options={[
-          { label: "Yes", value: true, next: "step2_purchase" },
+          { label: "Yes", value: true, next: "step2_delinquency" },
           { label: "No", value: false, next: "exit_non_conventional" },
         ]}
         onAnswer={(val, next) => handleAnswer("conventional", val, next)}
       />
     );
+}
 
-  case "step2_purchase":
+switch (step) {
+  case "step2_delinquency":
+    return (
+      <DelinquencyQuestion
+        onSubmit={({ currentlyDelinquent, late30, late60 }) => {
+          const hasDelinquency = currentlyDelinquent || late30 || late60;
+
+          handleAnswer(
+            {
+              currentlyDelinquent,
+              late30,
+              late60,
+            },
+            undefined,
+            hasDelinquency ? "exit_delinquent" : "step3_purchase"
+          );      
+        }}
+      />
+    );
+
+  case "step3_purchase":
     return (
       <PurchaseQuestion
         prompt={
@@ -379,13 +412,13 @@ switch (step) {
           if ((downPayment / price) >= 0.20) {
             setStep("exit_high_downpayment");
             } else {
-            setStep("step3_date");
+            setStep("step4_date");
             }
         }}
       />
     );
 
-  case "step3_date":
+  case "step4_date":
     return (
       <DateQuestion
         prompt="When did you purchase your home?"
@@ -398,49 +431,32 @@ switch (step) {
             purchaseMonth: date.getMonth() + 1,
           };
           setAnswers(updated);
-          setStep("step4_zip");
+          setStep("step5_zip");
         }}
       />
     );
 
-  case "step4_zip":
+  case "step5_zip":
     return (
       <ZipCodeQuestion
         onSubmit={(zip) => 
-          handleAnswer("zipCode", zip, "step5_interest")}
+          handleAnswer("zipCode", zip, "step6_interest")}
       />
     );
 
-  case "step5_interest":
+  case "step6_interest":
     return (
       <NumericQuestion
         onSubmit={(rate) => 
-          handleAnswer("interestRate", rate, "step6_credit_score")}
+          handleAnswer("interestRate", rate, "step7_credit_score")}
       />
     );
   
-  case "step6_credit_score":
+  case "step7_credit_score":
     return (
       <CreditScoreQuestion
         onSubmit={(val) => 
-          handleAnswer("creditScore", val, "step7_delinquency")}
-      />
-    );
-
-  case "step7_delinquency":
-    return (
-      <DelinquencyQuestion
-        onSubmit={({ currentlyDelinquent, late30, late60 }) => {
-          handleAnswer(
-            {
-              currentlyDelinquent,
-              late30,
-              late60,
-            },
-            undefined,
-            "step8_equity_boost"
-          );      
-        }}
+          handleAnswer("creditScore", val, "step8_equity_boost")}
       />
     );
 
@@ -464,11 +480,11 @@ switch (step) {
 };
 
 const currentStepIndex = steps.indexOf(step);
-const progressPercent = (currentStepIndex / (steps.length - 1)) * 100;
+const progressPercent = (currentStepIndex / (steps.length)) * 100;
 const showProgressBar = steps.includes(step);
 
 return (
-  <div className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth text-black">
+  <div className="min-h-screen overflow-y-auto pb-24 snap-y snap-mandatory scroll-smooth text-black">
     {/* ✅ Conditionally show progress bar */}
     {showProgressBar && (
       <div className="fixed bottom-12 left-0 w-full px-6 z-50">
@@ -791,8 +807,8 @@ function CreditScoreQuestion({
             credit score
           </a> through your credit card company or other free sources.
           <br /><br />
-          If you don't know or prefer not to say, we’ll use PMI pricing for credit scores between <strong>720 and 760</strong>.
-        </InfoTooltip>
+          If you don't know or prefer not to say, select "SKIP" and we’ll use PMI pricing for credit scores between <strong>720 and 760</strong>.
+        </InfoTooltip> 
       </h2>
 
       <div className="w-60 mx-auto">
@@ -892,7 +908,7 @@ function DelinquencyQuestion({
         </span>
       </h2>
 
-      <div className="flex flex-col gap-4 max-w-lg mx-auto text-left text-lg pt-4">
+      <div className="flex flex-col gap-4 max-w-lg mx-auto text-left text-md md:text-lg pt-4">
         <label className="flex items-start gap-3">
           <input
             type="checkbox"
@@ -901,7 +917,7 @@ function DelinquencyQuestion({
             disabled={noMissed}
             className="mt-1"
           />
-          <span>Yes, I’m currently behind on my mortgage.</span>
+          <span>Yes, I’m currently behind on payments.</span>
         </label>
 
         <label className="flex items-start gap-3">
@@ -912,7 +928,7 @@ function DelinquencyQuestion({
             disabled={noMissed }
             className="mt-1"
           />
-          <span>Yes, I’ve been 30+ days late in the past 12 months.</span>
+          <span>Yes, I’ve been 30+ days late in the past <br className="md:hidden" /> 12 months.</span>
         </label>
 
         <label className="flex items-start gap-3">
@@ -934,7 +950,7 @@ function DelinquencyQuestion({
             disabled={late30 || late60 || currentlyDelinquent}
             className="mt-1"
           />
-          <span>No, I have not recently missed any payments.</span>
+          <span>No, I haven't recently missed a payment.</span>
         </label>
       </div>
 
@@ -1143,7 +1159,26 @@ const handleSync = (source: "dollar" | "percent", value: string) => {
   <InfoTooltip size={16}>
       This is the <strong>full price</strong> you paid at <strong>closing</strong>.<br /><br />
       Find it on your <strong>closing dislosure</strong> as the "sale price of property" or check the <br />
-      price history on <strong>Zillow</strong> or <strong> Redfin</strong>.
+      price history on{" "}
+  <a
+    href="https://www.zillow.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-green-800 underline hover:text-green-900"
+  >
+    Zillow
+  </a>{" "}
+  or{" "}
+  <a
+    href="https://www.redfin.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-green-800 underline hover:text-green-900"
+  >
+    Redfin
+  </a>.
+  <br /><br />
+  If you don't know right now, enter your best estimate.
   </InfoTooltip>
 </label>
         <input
