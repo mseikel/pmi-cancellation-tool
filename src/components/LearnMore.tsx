@@ -83,7 +83,7 @@ export function LearnMore() {
         <img
           src={`${import.meta.env.BASE_URL}dollar-icon.png`}
           alt="Dollar icon"
-          className="place-self-start w-24 h-24 md:w-32 md:h-32 rotate-[-30deg] -translate-y-6"
+          className="place-self-start w-24 h-24 md:w-32 md:h-32 rotate-[-30deg] -translate-y-10"
         />
       </section>
 
@@ -137,7 +137,7 @@ export function LearnMore() {
           <div className="w-full text-center space-y-3">
             <p className="text-2xl md:text-4xl leading-snug max-w-3xl mx-auto -translate-y-6">
               Based on current home values, <br className="hidden md:block"  /> <strong>2.6 million</strong> borrowers could save <br className="hidden md:block" />
-              <strong>$1,200</strong> in the first year by cancelling PMI.
+              <strong>$1,200</strong> a year by cancelling PMI.
             </p>
             <div className="flex justify-center">
               <img
