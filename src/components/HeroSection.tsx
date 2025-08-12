@@ -13,23 +13,36 @@ export function HeroSection() {
         over <strong>2 million</strong> homeowners <br className="hidden md:block" /> <br className="md:hidden" /> 
         likely eligible to save <strong>$1,200</strong>.
       </p>
-      <div className="mt-8 md:mt-12 flex justify-center gap-4 md:gap-6 flex-wrap">
-        <Link
-            to="/learn"
-             className="bg-green-900 hover:bg-green-800 text-white text-lg md:text-xl  px-14 md:px-4 py-3 rounded-xl border-2 border-white font-semibold"
-         >
-            WHAT IS PRIVATE <br />
-            MORTAGE INSURANCE?
-        </Link>
+      <div className="mt-8 md:mt-12 flex flex-col items-center gap-2 md:gap-4">
+  {/* Top row with two buttons side-by-side */}
+  <div className="flex justify-center gap-2 md:gap-4 flex-wrap">
+    <Link
+      to="/learn"
+      className="bg-green-900 hover:bg-green-800 text-white text-lg md:text-xl w-full md:w-72 py-3 rounded-xl border-2 border-white font-semibold text-center"
+    >
+      WHAT IS PRIVATE <br />
+      MORTGAGE INSURANCE?
+    </Link>
 
-        <Link
-           to="/quiz"
-           className="bg-green-900 hover:bg-green-800 text-white text-lg md:text-xl px-16 md:px-6 py-3 rounded-xl border-2 border-white font-semibold"
-      >
-            FIND OUT HOW MUCH<br />
-            YOU COULD SAVE.
-        </Link>
-        </div>
+    <Link
+      to="/quiz"
+      className="bg-green-900 hover:bg-green-800 text-white text-lg md:text-xl w-full md:w-72 py-3 rounded-xl border-2 border-white font-semibold text-center"
+    >
+      FIND OUT HOW MUCH<br />
+      YOU COULD SAVE.
+    </Link>
+  </div>
+
+  {/* Third button centered below */}
+  <Link
+    to="/take-action"
+    className="bg-green-900 hover:bg-green-800 text-white text-lg md:text-xl w-full md:w-72 py-3 rounded-xl border-2 border-white font-semibold text-center"
+  >
+    TAKE ACTION TO END<br />
+    UNNECESSARY PMI.
+  </Link>
+</div>
+
     </section>
   );
 }

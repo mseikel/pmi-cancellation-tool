@@ -201,13 +201,17 @@ if (step === "done") {
   </li>
 </ul>
 <p>
-  {["UNLIKELY", "LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
-  <> Without any additional or missed payments, your PMI would likely automatically cancel around <strong>{resultData.auto_cancel_date}</strong>.</>
-)}
   {["LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
-  <> <br /><br />
+  <>
   Requesting cancellation now could save you <strong>${resultData.estimated_pmi_savings?.toLocaleString()}</strong> in PMI fees.</>
 )}
+</p>
+<p>
+  {["UNLIKELY", "LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
+  <>
+  Your PMI would likely automatically cancel around <strong>{resultData.auto_cancel_date}</strong>.</>
+)}
+  
 
 </p>
 
@@ -259,7 +263,7 @@ if (step === "exit_non_conventional") {
         </Link>
 
         <Link
-          to="/#resources"
+          to="/take-action"
           className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold text-center w-full md:w-auto"
         >
           TAKE ACTION
@@ -290,7 +294,7 @@ if (step === "exit_delinquent") {
         </Link>
 
         <Link
-          to="/#resources"
+          to="/take-action"
           className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold text-center w-full md:w-auto"
         >
           TAKE ACTION
@@ -320,7 +324,7 @@ if (step === "exit_high_downpayment") {
         </Link>
 
         <Link
-          to="/#resources"
+          to="/take-action"
           className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold text-center w-full md:w-auto"
         >
           TAKE ACTION

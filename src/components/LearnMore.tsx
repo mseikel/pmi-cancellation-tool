@@ -179,12 +179,12 @@ export function LearnMore() {
       {/* Row 2 */}
       <div className="flex flex-col md:flex-row w-full max-w-4xl gap-4">
         <div className="w-full md:w-1/3">
-          <a
-            href="#resources"
+          <Link
+            to="/take-action"
             className="flex items-center justify-center w-full h-full bg-green-900 hover:bg-green-800 text-white text-2xl px-6 py-4 rounded-xl border-2 border-white font-semibold text-center"
           >
             TAKE ACTION
-          </a>
+          </Link>
         </div>
         <div className="w-full md:w-2/3 bg-white px-6 py-4 rounded-xl text-center md:text-left text-xl md:text-2xl leading-snug h-full flex items-center">
           Explore our resources to simplify the PMI cancellation process.

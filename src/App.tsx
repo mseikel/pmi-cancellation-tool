@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { HeroSection } from './components/HeroSection';
 import { LearnMore } from './components/LearnMore';
 import { PMISurvey } from "./components/PMISurvey";
+import TakeAction from './components/TakeAction';
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
         <Route index element={<HeroSection />} />        
         <Route path="/learn" element={<LearnMore />} />
         <Route path="/quiz" element={<PMISurvey />} />
+        <Route path="/take-action" element={<TakeAction />} />
       </Routes>
     </main>
   );
