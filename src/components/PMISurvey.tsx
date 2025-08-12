@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef} from "react";
 import { Link } from "react-router-dom";
 import InfoTooltip from "./InfoTooltip";
+import { Download } from "lucide-react";
+import { useReactToPrint } from "react-to-print";
 
 // ================================
 // Survey Step Type Definitions
@@ -51,6 +53,7 @@ const steps: SurveyStep[] = [
   "step8_equity_boost"
 ];
 
+
 // ================================
 // Main Survey Component
 // ================================
@@ -59,6 +62,20 @@ export function PMISurvey() {
   const [resultMessage, setResultMessage] = useState<string | null>(null);
   const [answers, setAnswers] = useState<{ [key: string]: any }>({});
   const [resultData, setResultData] = useState<any | null>(null);
+
+const printRef = useRef<HTMLDivElement>(null);
+
+const handlePrint = useReactToPrint({
+  contentRef: printRef, // v3 API
+  documentTitle: `PMI-eligibility_${resultData?.cbsa_used?.[0] || resultData?.state_used?.[0] || "summary"}`,
+  pageStyle: `
+    @page { size: letter; margin: 0.75in; }
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  `,
+});
+
   const handleAnswer = (
   keyOrObject: string | { [key: string]: any },
   value?: any,
@@ -138,110 +155,131 @@ useEffect(() => {
 
 if (step === "done") {
   return (
-<div className="min-h-screen w-full px-6 py-16 max-w-3xl mx-auto text-center space-y-6">
-
-  <h2 className="text-4xl font-semibold">
-  {resultData && resultData.eligibility_level
-    ? `You’re ${resultData.eligibility_level} eligible for PMI cancellation.`
-    : `Checking eligibility${".".repeat(dotCount)}`
-}
-</h2>
+    <div className="min-h-screen w-full px-6 py-16 max-w-3xl mx-auto text-center space-y-6">
+      <h2 className="text-4xl font-semibold">
+        {resultData && resultData.eligibility_level
+          ? `You’re ${resultData.eligibility_level} eligible for PMI cancellation.`
+          : `Checking eligibility${".".repeat(dotCount)}`}
+      </h2>
 
       {resultData && (
-<div className="bg-white text-left p-4 mt-4 rounded-xl border space-y-3 w-full max-w-xl mx-auto">
+        <div
+          ref={printRef}
+          className="relative bg-white text-left p-4 mt-4 rounded-xl border space-y-3 w-full max-w-xl mx-auto print:bg-white"
+        >
+          {/* Download PDF icon in lower-right of the white box */}
+          <button
+            onClick={handlePrint}
+            className="absolute bottom-3 right-3 text-neutral-500 hover:text-green-800 print:hidden"
+            title="Download as PDF"
+            aria-label="Download eligibility summary as PDF"
+          >
+            <Download size={20} />
+          </button>
+
+          {/* 🆕 Print-only eligibility header */}
+    <h2 className="hidden print:block text-2xl font-semibold mb-4">
+      You’re {resultData.eligibility_level} eligible for PMI cancellation.
+    </h2>
+
+
           {resultData?.eligibility_message && (
-          <p
-            dangerouslySetInnerHTML={{ __html: resultData.eligibility_message }}
-          />
-        )}
-      <p>
-        Here’s how your responses translated into PMI eligibility:
-      </p>
+            <p
+              dangerouslySetInnerHTML={{ __html: resultData.eligibility_message }}
+            />
+          )}
+
+          <p>
+            Here’s how your responses translated into PMI eligibility:
+          </p>
+
           <ul className="list-disc list-outside pl-7 space-y-3">
-  
-  <li>
-    The typical house purchased in <strong>{resultData.cbsa_used?.[0] || resultData.state_used?.[0]}</strong>{" "}
-    {resultData.appreciation_percent >= 0 ? (
-      <> <strong>rose</strong> </> 
-    ) : (
-      <> <strong>fell</strong> </> 
-    )}
-    in value by <strong>{resultData.appreciation_percent?.toLocaleString()}%</strong> between
-    <strong> {monthName(answers.purchaseMonth)} {answers.purchaseYear} </strong> and
-    <strong> {monthName(resultData.current_month)} {resultData.current_year}</strong>.
-  </li>
+            <li>
+              The typical house purchased in <strong>{resultData.cbsa_used?.[0] || resultData.state_used?.[0]}</strong>{" "}
+              {resultData.appreciation_percent >= 0 ? (
+                <> <strong>rose</strong> </>
+              ) : (
+                <> <strong>fell</strong> </>
+              )}
+              in value by <strong>{resultData.appreciation_percent?.toLocaleString()}%</strong> between
+              <strong> {monthName(answers.purchaseMonth)} {answers.purchaseYear} </strong> and
+              <strong> {monthName(resultData.current_month)} {resultData.current_year}</strong>.
+            </li>
 
-  <li>
-    Your home, originally purchased for <strong>${resultData.purchase_price?.toLocaleString()}</strong>, would now be worth around <strong>${resultData.current_home_value?.toLocaleString()}</strong> based on area price trends.
-  </li>
+            <li>
+              Your home, originally purchased for <strong>${resultData.purchase_price?.toLocaleString()}</strong>, would now be worth around <strong>${resultData.current_home_value?.toLocaleString()}</strong> based on area price trends.
+            </li>
 
-  {resultData.renovation_value > 0 && (
-    <li>
-      With a reported renovation value of <strong>${resultData.renovation_value.toLocaleString()}</strong>, your estimated home value increases to <strong>${resultData.adjusted_current_value.toLocaleString()}</strong>.
-    </li>
-  )}
+            {resultData.renovation_value > 0 && (
+              <li>
+                With a reported renovation value of <strong>${resultData.renovation_value.toLocaleString()}</strong>, your estimated home value increases to <strong>${resultData.adjusted_current_value.toLocaleString()}</strong>.
+              </li>
+            )}
 
-  <li>
-    With a down payment of <strong>${answers.downPayment?.toLocaleString()}</strong>
-    {resultData.additional_payments > 0 && (
-      <>
-        , additional payments of <strong>${resultData.additional_payments.toLocaleString()}</strong>
-      </>
-    )}
-    , and{" "}
-    {answers.interestRate == null
-      ? "an estimated "
-      : "a reported "}
-    mortgage rate of <strong>{(resultData.interest_rate * 100).toFixed(1)}%</strong>,
-    your remaining loan balance is approximately <strong>${resultData.unpaid_balance?.toLocaleString()}</strong>.
-  </li>
+            <li>
+              With a down payment of <strong>${answers.downPayment?.toLocaleString()}</strong>
+              {resultData.additional_payments > 0 && (
+                <>
+                  , additional payments of <strong>${resultData.additional_payments.toLocaleString()}</strong>
+                </>
+              )}
+              , and{" "}
+              {answers.interestRate == null
+                ? "an estimated "
+                : "a reported "}
+              mortgage rate of <strong>{(resultData.interest_rate * 100).toFixed(1)}%</strong>,
+              your remaining loan balance is approximately <strong>${resultData.unpaid_balance?.toLocaleString()}</strong>.
+            </li>
 
-  <li>
-    Your estimated home equity is <strong>${resultData.estimated_equity?.toLocaleString()}</strong>, which is <strong>{resultData.equity_percent?.toLocaleString()}%</strong> of your current home value.
-  </li>
-</ul>
-<p>
-  {["LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
-  <>
-  Requesting cancellation now could save you <strong>${resultData.estimated_pmi_savings?.toLocaleString()}</strong> in PMI fees.</>
-)}
-</p>
-<p>
-  {["UNLIKELY", "LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
-  <>
-  Your PMI would likely automatically cancel around <strong>{resultData.auto_cancel_date}</strong>.</>
-)}
-  
+            <li>
+              Your estimated home equity is <strong>${resultData.estimated_equity?.toLocaleString()}</strong>, which is <strong>{resultData.equity_percent?.toLocaleString()}%</strong> of your current home value.
+            </li>
+          </ul>
 
-</p>
+          <p>
+            {["LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
+              <>
+                Requesting cancellation now could save you <strong>${resultData.estimated_pmi_savings?.toLocaleString()}</strong> in PMI fees.
+              </>
+            )}
+          </p>
 
-
+          <p>
+            {["UNLIKELY", "LIKELY", "POSSIBLY"].includes(resultData.eligibility_level?.[0]) && (
+              <>
+                Your PMI would likely automatically cancel around <strong>{resultData.auto_cancel_date}</strong>.
+              </>
+            )}
+          </p>
+          {/* 🆕 Print-only disclaimer */}
+    <div className="hidden print:block text-sm mt-6 border-t pt-3">
+      <strong>Disclaimer:</strong> This tool only provides an estimate and does not guarantee PMI cancellation.
+      Your servicer may require a $50–$500 appraisal or broker price opinion to verify your home’s value.
+    </div>
         </div>
-        
       )}
-        <div className="bg-green-900 text-white text-sm md:text-base p-4 rounded-xl w-full max-w-xl mx-auto">
-  <strong>Disclaimer:</strong> This tool only provides an estimate and does not guarantee PMI cancellation.
-Your servicer may require a $50–$500 appraisal or broker price opinion to verify your home’s value.
-</div>
-      {/* Disclaimer Footer */}
 
-       
+      <div className="bg-green-900 text-white text-sm md:text-base p-4 rounded-xl w-full max-w-xl mx-auto">
+        <strong>Disclaimer:</strong> This tool only provides an estimate and does not guarantee PMI cancellation.
+        Your servicer may require a $50–$500 appraisal or broker price opinion to verify your home’s value.
+      </div>
+
       {/* Debug info only visible in development */}
       {process.env.NODE_ENV === "development" && (
-        <pre className="bg-neutral-100 p-4 text-left rounded text-sm">
+        <pre className="bg-neutral-100 p-4 text-left rounded text-sm print:hidden">
           {JSON.stringify(answers, null, 2)}
         </pre>
       )}
 
       {process.env.NODE_ENV === "development" && resultData && (
-  <pre className="bg-neutral-100 p-4 text-left rounded text-sm">
-    {JSON.stringify(resultData, null, 2)}
-  </pre>
-)}
-
+        <pre className="bg-neutral-100 p-4 text-left rounded text-sm print:hidden">
+          {JSON.stringify(resultData, null, 2)}
+        </pre>
+      )}
     </div>
   );
 }
+
 
 if (step === "exit_non_conventional") {
   return (
