@@ -49,10 +49,8 @@ Sincerely,
   );
 
   return (
-    <section id="resources" className="min-h-screen flex flex-col max-w-5xl mx-auto px-4 py-6">
-      <h1 className="font-heading text-4xl md:text-5xl font-bold tracking-wider uppercase text-center pt-2 pb-6">
-  Take Action
-</h1>
+    <section id="resources" className="screen-minus-nav flex flex-col max-w-5xl mx-auto px-4 transform py-4 md:-translate-y-4">
+      
 
 
       <div className="flex-1 grid grid-cols-1 auto-rows-auto md:grid-cols-2  gap-4">

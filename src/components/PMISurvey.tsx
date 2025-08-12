@@ -155,7 +155,7 @@ useEffect(() => {
 
 if (step === "done") {
   return (
-    <div className="min-h-screen w-full px-6 py-16 max-w-3xl mx-auto text-center space-y-6">
+<div className="min-h-[calc(100svh-var(--nav-h))] w-full px-6 max-w-3xl mx-auto text-center space-y-6 flex flex-col items-center justify-center ">
       <h2 className="text-4xl font-semibold">
         {resultData && resultData.eligibility_level
           ? `You’re ${resultData.eligibility_level} eligible for PMI cancellation.`
@@ -283,7 +283,7 @@ if (step === "done") {
 
 if (step === "exit_non_conventional") {
   return (
-    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-3xl mx-auto space-y-6">
+<div className="min-h-[calc(100svh-var(--nav-h))] flex flex-col justify-center items-center text-center px-6 max-w-3xl mx-auto space-y-6 transform -translate-y-6">
       <h1 className="font-heading text-3xl md:text-5xl tracking-wider uppercase">
         This tool only applies
         to <strong>30-year conventional</strong> mortgages.
@@ -313,7 +313,7 @@ if (step === "exit_non_conventional") {
 
 if (step === "exit_delinquent") {
   return (
-    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-3xl mx-auto space-y-6">
+<div className="min-h-[calc(100svh-var(--nav-h))] flex flex-col justify-center items-center text-center px-6 max-w-3xl mx-auto space-y-6 transform -translate-y-6">
       <h1 className="font-heading text-3xl md:text-5xl tracking-wider uppercase">
         PMI cancellation likely isn’t available right now.
       </h1>
@@ -344,7 +344,7 @@ if (step === "exit_delinquent") {
 
 if (step === "exit_high_downpayment") {
   return (
-    <div className="h-screen flex flex-col justify-center items-center text-center px-6 py-16 max-w-3xl mx-auto space-y-6">
+<div className="min-h-[calc(100svh-var(--nav-h))] flex flex-col justify-center items-center text-center px-6 max-w-3xl mx-auto space-y-6 transform -translate-y-6">
       <h1 className="font-heading text-3xl md:text-5xl tracking-wider uppercase">
         PMI is <strong>not</strong> required with <br />
         <strong>20% or more</strong> down.
@@ -436,7 +436,7 @@ switch (step) {
         prompt={
           <h2 className="text-3xl font-semibold text-center">
             <span className="inline">
-              Tell us more about <br />  your home purchase.
+              Tell us more about <br />  your purchase.
             </span>
           </h2>
         }
@@ -526,11 +526,11 @@ const progressPercent = (currentStepIndex / (steps.length)) * 100;
 const showProgressBar = steps.includes(step);
 
 return (
-  <div className="min-h-screen overflow-y-auto pb-24 snap-y snap-mandatory scroll-smooth text-black">
+<div className="min-h-[calc(100svh-var(--nav-h))] overflow-y-auto pb-24 text-black">
     {/* ✅ Conditionally show progress bar */}
     {showProgressBar && (
       <div className="fixed bottom-12 left-0 w-full px-6 z-50">
-  <div className="relative w-full h-4 bg-neutral-300 rounded-full">
+  <div className="relative w-full h-4 bg-white rounded-full">
     {/* Progress fill */}
     <div
       className="absolute top-0 left-0 h-4 bg-green-800 rounded-full transition-all duration-500"
@@ -548,7 +548,7 @@ return (
     )}
 
     {/* ✅ Main Section */}
-    <section className="snap-start h-screen flex justify-center items-center px-6 py-16 max-w-3xl mx-auto">
+<section className="min-h-[calc(100dvh-var(--nav-h)-var(--progress-h))] flex items-center justify-center px-6 max-w-3xl mx-auto">
       <div className="w-full max-w-xl text-center">
         {renderStep()}
       </div>
@@ -970,7 +970,7 @@ function DelinquencyQuestion({
             disabled={noMissed }
             className="mt-1"
           />
-          <span>Yes, I’ve been 30+ days late in the past <br className="md:hidden" /> 12 months.</span>
+          <span>Yes, I’ve been 30+ days late in the past 12 months.</span>
         </label>
 
         <label className="flex items-start gap-3">
@@ -1059,7 +1059,7 @@ function EquityBoostQuestion({
 };
 
   return (
-    <div className="text-center space-y-6">
+<div className="text-center space-y-6 pt-[calc(var(--nav-h)+0.1rem)] pb-[8rem]">
       <h2 className="text-3xl font-semibold text-center">
         Have you made renovations or additional mortgage payments?
         <InfoTooltip className="inline-block align-middle ml-2">

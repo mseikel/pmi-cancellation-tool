@@ -2,3 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile-first defaults */
+:root {
+  --nav-h: 60px;        /* typical mobile navbar */
+  --progress-h: 96px;   /* bar + labels + bottom gap */
+}
+
+/* Tablet/Desktop overrides */
+@media (min-width: 768px) {
+  :root {
+    --nav-h: 80px;      /* your actual desktop nav height */
+    --progress-h: 96px; /* bar + labels + bottom gap on desktop */
+  }
+}
+
+
+/* Use on any "full screen" section so it fits under the fixed nav */
+.screen-minus-nav {
+  min-height: calc(100dvh - var(--nav-h));
+}
+
+
