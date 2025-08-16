@@ -28,7 +28,7 @@ export default function InfoTooltip({ children, size = 18, className = "" }: Inf
 
   const toggle = () => setVisible((v) => !v);
 
-  // Decide top vs bottom when opening
+  // Decide top vs bottom when opening (keeps your existing flip logic)
   useEffect(() => {
     if (visible && iconRef.current && panelRef.current) {
       const iconRect = iconRef.current.getBoundingClientRect();
@@ -45,20 +45,33 @@ export default function InfoTooltip({ children, size = 18, className = "" }: Inf
     }
   }, [visible]);
 
-  // Compute viewport coords for the portal panel
+  // Compute viewport coords for the portal panel and clamp horizontally
   const updateCoords = () => {
     if (!iconRef.current) return;
     const r = iconRef.current.getBoundingClientRect();
-    const gap = 8; // 0.5rem like before
+    const gap = 8; // px
     const centerX = r.left + r.width / 2;
     const top = position === "top" ? r.top - gap : r.bottom + gap;
-    setCoords({ top, left: centerX });
+
+    let left = centerX;
+
+    // If panel has been rendered, measure and clamp so it never hangs off-screen
+    if (panelRef.current) {
+      const panelRect = panelRef.current.getBoundingClientRect();
+      const half = panelRect.width / 2;
+      const margin = 8; // keep 8px from viewport edge
+      const minLeft = half + margin;
+      const maxLeft = window.innerWidth - half - margin;
+      left = Math.min(Math.max(centerX, minLeft), Math.max(minLeft, maxLeft)); // ensure sensible bounds
+    }
+
+    setCoords({ top, left });
   };
 
   useLayoutEffect(() => {
     if (!visible) return;
     updateCoords();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, position]);
 
   // Keep position synced on scroll/resize (including inside scrollable parents)
@@ -96,21 +109,21 @@ export default function InfoTooltip({ children, size = 18, className = "" }: Inf
             style={{
               top: coords.top,
               left: coords.left,
-              // center horizontally; for top we pull up by its own height
-              transform:
-                position === "top"
-                  ? "translate(-50%, -100%)"
-                  : "translate(-50%, 0)",
+              transform: position === "top" ? "translate(-50%, -100%)" : "translate(-50%, 0)",
             }}
             onMouseEnter={show}
             onMouseLeave={hide}
           >
-            {/* Your actual tooltip panel */}
+            {/* Tooltip panel */}
             <div
               ref={panelRef}
-              className={`pointer-events-auto px-4 py-3 bg-white text-sm text-black font-normal rounded-xl shadow-lg transition-opacity duration-300
+              className={`
+                pointer-events-auto
+                px-4 py-3 bg-white text-sm text-black font-normal rounded-xl shadow-lg transition-opacity duration-200
                 ${visible ? "opacity-100" : "opacity-0"}
-                max-w-[80vw] sm:max-w-[40rem] min-w-[12rem] sm:min-w-[20rem] border border-neutral-200
+                max-w-[80vw] sm:max-w-[20rem] min-w-[14rem]
+                border border-neutral-200
+                whitespace-normal break-words
               `}
               style={{
                 width: "fit-content",

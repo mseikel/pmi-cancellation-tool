@@ -155,8 +155,7 @@ useEffect(() => {
 
 if (step === "done") {
   return (
-<div className="min-h-[calc(100svh-var(--nav-h))] w-full px-6 max-w-3xl mx-auto text-center space-y-6 flex flex-col items-center justify-center ">
-      <h2 className="text-4xl font-semibold">
+<div className="min-h-[calc(100dvh-var(--nav-h))] w-full px-6 pt-6 md:pt-4 max-w-4xl mx-auto text-center space-y-6 flex flex-col items-center justify-center">      <h2 className="text-4xl font-semibold">
         {resultData && resultData.eligibility_level
           ? `You’re ${resultData.eligibility_level} eligible for PMI cancellation.`
           : `Checking eligibility${".".repeat(dotCount)}`}
@@ -165,12 +164,12 @@ if (step === "done") {
       {resultData && (
         <div
           ref={printRef}
-          className="relative bg-white text-left p-4 mt-4 rounded-xl border space-y-3 w-full max-w-xl mx-auto print:bg-white"
+          className="relative bg-white text-left px-4 pt-0 pb-2 mt-2 rounded-xl border space-y-3 w-full max-w-3xl mx-auto print:bg-white"
         >
           {/* Download PDF icon in lower-right of the white box */}
           <button
             onClick={handlePrint}
-            className="absolute bottom-3 right-3 text-neutral-500 hover:text-green-800 print:hidden"
+            className="absolute top-3 right-3 text-neutral-500 hover:text-green-800 print:hidden"
             title="Download as PDF"
             aria-label="Download eligibility summary as PDF"
           >
@@ -251,6 +250,20 @@ if (step === "done") {
               </>
             )}
           </p>
+          <div className="flex flex-col md:flex-row gap-2 w-full justify-center">
+        <Link
+          to="/learn"
+          className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold text-center w-full md:w-48 print:hidden"
+        >
+          LEARN MORE
+        </Link>
+        <Link
+          to="/take-action"
+          className="bg-green-900 hover:bg-green-800 text-white text-lg px-6 py-3 rounded-xl border-2 border-white font-semibold text-center w-full md:w-48 print:hidden"
+        >
+          TAKE ACTION
+        </Link>
+      </div>
           {/* 🆕 Print-only disclaimer */}
     <div className="hidden print:block text-sm mt-6 border-t pt-3">
       <strong>Disclaimer:</strong> This tool only provides an estimate and does not guarantee PMI cancellation.
@@ -259,7 +272,7 @@ if (step === "done") {
         </div>
       )}
 
-      <div className="bg-green-900 text-white text-sm md:text-base p-4 rounded-xl w-full max-w-xl mx-auto">
+      <div className="bg-green-900 text-white text-sm md:text-base p-4 rounded-xl w-full max-w-3xl mx-auto">
         <strong>Disclaimer:</strong> This tool only provides an estimate and does not guarantee PMI cancellation.
         Your servicer may require a $50–$500 appraisal or broker price opinion to verify your home’s value.
       </div>
@@ -796,6 +809,8 @@ function ZipCodeQuestion({
               inputsRef.current[i] = el!;
         }}
             type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             maxLength={1}
             value={digit}
             onChange={(e) => handleChange(i, e.target.value)}
