@@ -74,7 +74,7 @@ export function LearnMore() {
             With <strong>PMI</strong>, consumers can make a smaller down payment
             like <strong>10 percent</strong>.<br /><br />
             Lenders then require <strong>borrowers</strong> to pay 
-            mortgage insurers roughly <strong>$100</strong> a month.
+            mortgage insurers roughly <strong>$100</strong> a month (on average).
           </p>
         </FadeInWhenVisible>
         <div className="absolute bottom-4 flex justify-center w-full">

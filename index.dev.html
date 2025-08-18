@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="favicon.ico" />
+    <!-- use BASE_URL so paths work in dev and when built for /pmi-cancellation-tool/ -->
+    <link rel="icon" href="%BASE_URL%favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Unnecessary PMI</title>
 
@@ -17,6 +18,7 @@
   <body>
     <div id="root"></div>
 
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- IMPORTANT: use %BASE_URL% so dev and prod paths line up -->
+    <script type="module" src="%BASE_URL%src/main.tsx"></script>
   </body>
 </html>

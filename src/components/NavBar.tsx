@@ -12,7 +12,7 @@ export default function NavBar() {
     "block px-4 py-2 text-lg hover:bg-green-800 md:hover:bg-transparent";
 
   return (
-    <header className="bg-green-900 text-white fixed top-0 left-0 w-full z-50">
+    <header className="bg-green-900 text-white fixed top-0 left-0 w-full z-50 print-hidden">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4">
         <Link to="/" className="font-bold text-xl" onClick={close}>
           Unnecessary PMI
@@ -39,11 +39,11 @@ export default function NavBar() {
       </div>
       {open && (
         <nav className="md:hidden border-t border-green-800">
-          <NavLink to="/learn" className={linkClasses} onClick={close}>
-            Learn More
-          </NavLink>
           <NavLink to="/quiz" className={linkClasses} onClick={close}>
             Check Eligibility
+          </NavLink>
+          <NavLink to="/learn" className={linkClasses} onClick={close}>
+            Learn More
           </NavLink>
           <NavLink to="/take-action" className={linkClasses} onClick={close}>
             Take Action

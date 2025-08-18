@@ -56,8 +56,8 @@ Sincerely,
       <div className="flex-1 grid grid-cols-1 auto-rows-auto md:grid-cols-2  gap-4">
         {/* 1 */}
         <Card title="Request PMI Cancellation">
-          <p>Call or email your mortage servicer. It is the company to which you send monthly mortage payments. </p>
-          <p>Their telephone number and mailing address should be listed on your monthly statement</p>
+          <p>Call or email your mortgage servicer. It is the company to which you send monthly mortage payments. </p>
+          <p>Their telephone number and mailing address should be listed on your monthly statement.</p>
           <p>For informational purposes only, here's a model script you can send by email or your servicer’s secure message portal.</p>
           <details className="space-y-2">
             <summary className="cursor-pointer text-green-800 underline">
@@ -76,7 +76,7 @@ Sincerely,
 
         {/* 2 */}
         <Card title="File a Complaint">
-          <p>If your servicer is unresponsive or refuses PMI cancellation without proper reason, you can submit a complaint to the CFPB.</p>
+          <p>If your servicer is unresponsive or refuses PMI cancellation without explanation, you can submit a complaint to the CFPB.</p>
           <div className="space-y-2">
             <LinkButton href="https://www.consumerfinance.gov/complaint/" label="CFPB Complaint Form">
               CFPB Complaint Form
@@ -123,7 +123,7 @@ Sincerely,
         </Card>
         {/* 4 */}
         <Card title="Contact Policymakers">
-          <p>Reach out your elected representatives to support automated PMI cancellation based on current home prices using existing technology.</p>
+          <p>Reach out to your elected representatives to support automated PMI cancellation based on current home prices using existing technology.</p>
           <p>It can be helpful to add details about your personal experience with the PMI cancellation process.</p>
           <details className="space-y-2">
   <summary className="cursor-pointer text-green-800 underline">
