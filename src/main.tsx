@@ -9,7 +9,7 @@ const isProd = import.meta.env.MODE === 'production'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter basename={isProd ? '/pmi-cancellation-tool' : '/'}>
+    <BrowserRouter basename="/">
       <App />
     </BrowserRouter>
   </React.StrictMode>
